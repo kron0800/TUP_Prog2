@@ -1,0 +1,5 @@
+.vs
+obj/
+
+# Ignore desktop.ini from GoogleDrive 
+desktop.ini
