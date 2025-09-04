@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ej1_5_Facturacion.Domain
+namespace Prog2_Act01.Domain
 {
     public class Articulo
     {

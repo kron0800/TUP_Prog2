@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Prog2_Act01.Data.Utils;
-using Ej1_5_Facturacion.Domain;
+using Prog2_Act01.Domain;
 
 namespace Prog2_Act01.Data
 {
