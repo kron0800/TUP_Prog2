@@ -71,10 +71,6 @@ namespace Prog2_Act01.Data.Utils
                 Console.WriteLine(ex);
                 dt = null;
             }
-            //finally
-            //{
-            //    _connection.Close();
-            //}
             return dt;
         }
 

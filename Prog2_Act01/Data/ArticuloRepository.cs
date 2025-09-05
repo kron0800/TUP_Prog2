@@ -43,13 +43,11 @@ namespace Prog2_Act01.Data
             if (GetById(entity.IdArticulo) == null)
             {
                 // Create new one
-                Console.WriteLine("creating new articulo");
                 dt = DataHelper.GetInstance().ExecuteSPReader("CreateNewArticulo", lstParams);
             }
             else
             {
                 // Update existing one
-                Console.WriteLine("updating articulo");
                 lstParams.Add(new Parameters("@IdArticulo", entity.IdArticulo));
                 dt = DataHelper.GetInstance().ExecuteSPReader("UpdateArticulo", lstParams);
             }

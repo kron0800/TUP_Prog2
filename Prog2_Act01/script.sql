@@ -243,7 +243,3 @@ BEGIN
     DELETE FROM Articulo WHERE id_articulo = @IdArticulo;
 END;
 GO
-
-SELECT * FROM DetalleFactura D WHERE D.id_factura = 9
-SELECT * FROM Factura
-

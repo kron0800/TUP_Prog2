@@ -36,9 +36,6 @@ namespace Prog2_Act01.Domain
             Cantidad = Convert.ToInt32(row["cantidad"]);
         }
 
-        // Navigation properties
-        //public virtual Factura Factura { get; set; }
-        //public virtual Articulo Articulo { get; set; }
         public override string ToString()
         {
             return $"Articulo: {Articulo.Nombre} - Precio: {Articulo.PrecioUnitario} - Cantidad: {Cantidad}";

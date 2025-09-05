@@ -40,12 +40,10 @@ namespace Prog2_Act01.Data
             if (GetById(entity.IdFactura) == null) 
             {
                 // Create new one
-                Console.WriteLine("creating new one");
                 dt = DataHelper.GetInstance().ExecuteSPReader("CreateNewFactura", lstParams);
             } else
             {
                 // Update existing one
-                Console.WriteLine("updating ");
                 lstParams.Add(new Parameters("@IdFactura", entity.IdFactura));
                 dt = DataHelper.GetInstance().ExecuteSPReader("UpdateFactura", lstParams);
             }
