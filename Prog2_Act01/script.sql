@@ -13,8 +13,8 @@ CREATE TABLE Articulo (
     id_articulo INT IDENTITY(1,1) PRIMARY KEY,
     nombre NVARCHAR(100) NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL
-    
 );
+
 
 CREATE TABLE Factura (
     id_factura INT IDENTITY(1,1) PRIMARY KEY,
@@ -36,8 +36,8 @@ CREATE TABLE DetalleFactura (
         ON DELETE CASCADE, -- si se borra la factura, se borran sus detalles
     CONSTRAINT FK_DetalleFactura_Articulo FOREIGN KEY (id_articulo) 
         REFERENCES Articulo(id_articulo)
+        ON DELETE CASCADE -- si se borra un articulo, se borran los detalles vinculados a tal
 );
-
 -- Inserts --
 
 INSERT INTO FormaPago (nombre) VALUES ('Efectivo');
@@ -112,7 +112,7 @@ CREATE PROCEDURE SelectFacturaById
     @IdFactura int
 AS
 BEGIN
-    SELECT * FROM Factura F WHERE id_factura = @IdFactura
+    SELECT F.*, FP.nombre FROM Factura F JOIN FormaPago FP ON F.id_forma_pago = FP.id_forma_pago WHERE id_factura = @IdFactura
 END;
 GO
 --
@@ -123,7 +123,7 @@ CREATE PROCEDURE CreateNewFactura
     @Cliente NVARCHAR(100)
 AS
 BEGIN
-    INSERT INTO Factura (nro_factura, fecha, id_forma_pago, cliente) VALUES (@NroFactura, @Fecha, @IdFormaPago, @Cliente);
+    INSERT INTO Factura (nro_factura, fecha, id_forma_pago, cliente) OUTPUT INSERTED.id_factura VALUES (@NroFactura, @Fecha, @IdFormaPago, @Cliente);
 END;
 GO
 --
@@ -135,7 +135,7 @@ CREATE PROCEDURE UpdateFactura
     @Cliente NVARCHAR(100)
 AS
 BEGIN
-    UPDATE Factura SET nro_factura = @NroFactura, fecha = @Fecha, id_forma_pago = @IdFormaPago, cliente = @Cliente WHERE id_factura = @IdFactura;
+    UPDATE Factura SET nro_factura = @NroFactura, fecha = @Fecha, id_forma_pago = @IdFormaPago, cliente = @Cliente OUTPUT INSERTED.id_factura WHERE id_factura = @IdFactura;
 END;
 GO
 --
@@ -152,15 +152,23 @@ GO
 CREATE PROCEDURE SelectAllDetallesFacturas
 AS
 BEGIN
-    SELECT * FROM DetalleFactura
+    SELECT * FROM DetalleFactura D JOIN Articulo A ON D.id_articulo = A.id_articulo
 END;
 GO
 --
 CREATE PROCEDURE GetDetallesFacturaById
+    @IdDetalleFactura int
+AS
+BEGIN
+    SELECT * FROM DetalleFactura D JOIN Articulo A ON D.id_articulo = A.id_articulo WHERE D.id_detalle_factura = @IdDetalleFactura
+END;
+GO
+--
+CREATE PROCEDURE GetAllDetallesFacturaByIdFactura
     @IdFactura int
 AS
 BEGIN
-    SELECT * FROM DetalleFactura D WHERE D.id_factura = @IdFactura
+    SELECT * FROM DetalleFactura D JOIN Articulo A ON D.id_articulo = A.id_articulo WHERE D.id_factura = @IdFactura
 END;
 GO
 --
@@ -170,7 +178,7 @@ CREATE PROCEDURE CreateNewDetalleFactura
     @Cantidad int
 AS
 BEGIN
-    INSERT INTO DetalleFactura (id_factura, id_articulo, cantidad) VALUES (@IdFactura, @IdArticulo, @Cantidad );
+    INSERT INTO DetalleFactura (id_factura, id_articulo, cantidad) OUTPUT INSERTED.id_detalle_factura VALUES (@IdFactura, @IdArticulo, @Cantidad );
 END;
 GO
 --
@@ -181,7 +189,7 @@ CREATE PROCEDURE UpdateDetalleFactura
     @Cantidad int
 AS
 BEGIN
-    UPDATE DetalleFactura SET id_factura = @IdFactura, id_articulo = @IdArticulo, cantidad = @Cantidad WHERE id_detalle_factura = @IdDetalleFactura;
+    UPDATE DetalleFactura SET id_factura = @IdFactura, id_articulo = @IdArticulo, cantidad = @Cantidad OUTPUT INSERTED.id_detalle_factura WHERE id_detalle_factura = @IdDetalleFactura;
 END;
 GO
 --
@@ -214,7 +222,7 @@ CREATE PROCEDURE CreateNewArticulo
     @PrecioUnitario int
 AS
 BEGIN
-    INSERT INTO Articulo (nombre, precio_unitario) VALUES (@Nombre, @PrecioUnitario);
+    INSERT INTO Articulo (nombre, precio_unitario) OUTPUT INSERTED.id_articulo VALUES (@Nombre, @PrecioUnitario);
 END;
 GO
 --
@@ -224,7 +232,7 @@ CREATE PROCEDURE UpdateArticulo
     @PrecioUnitario int
 AS
 BEGIN
-    UPDATE Articulo SET nombre = @Nombre, precio_unitario = @PrecioUnitario WHERE id_articulo = @IdArticulo;
+    UPDATE Articulo SET nombre = @Nombre, precio_unitario = @PrecioUnitario OUTPUT INSERTED.id_articulo WHERE id_articulo = @IdArticulo;
 END;
 GO
 --
@@ -235,3 +243,7 @@ BEGIN
     DELETE FROM Articulo WHERE id_articulo = @IdArticulo;
 END;
 GO
+
+SELECT * FROM DetalleFactura D WHERE D.id_factura = 9
+SELECT * FROM Factura
+

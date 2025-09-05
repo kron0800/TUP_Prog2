@@ -20,5 +20,17 @@ namespace Prog2_Act01.Domain
             Nombre = row["nombre"].ToString();
             PrecioUnitario = Convert.ToDecimal(row["precio_unitario"]);
         }
+
+        public Articulo(int idArticulo, string nombre, decimal precioUnitario)
+        {
+            IdArticulo = idArticulo;
+            Nombre = nombre;
+            PrecioUnitario = precioUnitario;
+        }
+
+        public override string ToString()
+        {
+            return $"Articulo: {Nombre} - Precio unitario: {PrecioUnitario}";
+        }
     }
 }

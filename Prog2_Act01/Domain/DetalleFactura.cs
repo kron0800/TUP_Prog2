@@ -11,21 +11,37 @@ namespace Prog2_Act01.Domain
     {
         public int IdDetalleFactura { get; set; }
         public int IdFactura { get; set; }
-        public int IdArticulo { get; set; }
+        public Articulo Articulo { get; set; }
         public int Cantidad { get; set; }
 
         public DetalleFactura() { }
+
+        public DetalleFactura(int idDetalleFactura, int idFactura, Articulo articulo, int cantidad)
+        {
+            IdDetalleFactura = idDetalleFactura;
+            IdFactura = idFactura;
+            Articulo = articulo;
+            Cantidad = cantidad;
+        }
 
         public DetalleFactura(DataRow row)
         {
             IdDetalleFactura = Convert.ToInt32(row["id_detalle_factura"]);
             IdFactura = Convert.ToInt32(row["id_factura"]);
-            IdArticulo = Convert.ToInt32(row["id_articulo"]);
+            Articulo = new Articulo(
+                Convert.ToInt32(row["id_articulo"]),
+                row["nombre"].ToString(),
+                Convert.ToDecimal(row["precio_unitario"])
+                );
             Cantidad = Convert.ToInt32(row["cantidad"]);
         }
 
         // Navigation properties
         //public virtual Factura Factura { get; set; }
         //public virtual Articulo Articulo { get; set; }
+        public override string ToString()
+        {
+            return $"Articulo: {Articulo.Nombre} - Precio: {Articulo.PrecioUnitario} - Cantidad: {Cantidad}";
+        }
     }
 }

@@ -19,22 +19,15 @@ namespace Prog2_Act01.Services
             return uow.ArticuloRepository.GetById(id);
         }
 
-        public bool SaveArticulo(Articulo articulo)
+        public int SaveArticulo(Articulo articulo)
         {
             using var uow = new UnitOfWork();
             try
             {
-                bool ok = uow.ArticuloRepository.Save(articulo);
-                if (ok)
-                {
-                    uow.Commit();
-                    return true;
-                }
-                else
-                {
-                    uow.Rollback();
-                    return false;
-                }
+                int idArticulo = uow.ArticuloRepository.Save(articulo);
+                if (idArticulo == -1) { throw new Exception("Unable to save articulo"); }
+                uow.Commit();
+                return idArticulo;
             }
             catch (Exception)
             {

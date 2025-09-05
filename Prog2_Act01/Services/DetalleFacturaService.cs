@@ -24,22 +24,15 @@ namespace Prog2_Act01.Services
             return uow.DetalleFacturaRepository.GetById(id);
         }
 
-        public bool SaveDetalleFactura(DetalleFactura detalleFactura)
+        public int SaveDetalleFactura(DetalleFactura detalleFactura)
         {
             using var uow = new UnitOfWork();
             try
             {
-                bool ok = uow.DetalleFacturaRepository.Save(detalleFactura);
-                if (ok)
-                {
-                    uow.Commit();
-                    return true;
-                }
-                else
-                {
-                    uow.Rollback();
-                    return false;
-                }
+                int idDetalleFactura = uow.DetalleFacturaRepository.Save(detalleFactura);
+                if (idDetalleFactura == -1) { throw new Exception("Unable to save detalleFactura"); }
+                uow.Commit();
+                return idDetalleFactura;                
             }
             catch (Exception)
             {

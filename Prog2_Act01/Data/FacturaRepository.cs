@@ -25,7 +25,7 @@ namespace Prog2_Act01.Data
             return new Factura(dt.Rows[0]);
         }
 
-        public bool Save(Factura entity)
+        public int Save(Factura entity)
         {
             List<Parameters> lstParams = new List<Parameters>()
             {
@@ -34,26 +34,33 @@ namespace Prog2_Act01.Data
                 new Parameters("@IdFormaPago", entity.FormaPago.IdFormaPago),
                 new Parameters("@Cliente", entity.Cliente)
             };
+            DataTable dt = null;
             int result = 0;
+
             if (GetById(entity.IdFactura) == null) 
             {
                 // Create new one
-                result = DataHelper.GetInstance().ExecuteSPNonQuery("CreateNewFactura", lstParams);
+                Console.WriteLine("creating new one");
+                dt = DataHelper.GetInstance().ExecuteSPReader("CreateNewFactura", lstParams);
             } else
             {
                 // Update existing one
+                Console.WriteLine("updating ");
                 lstParams.Add(new Parameters("@IdFactura", entity.IdFactura));
-                result = DataHelper.GetInstance().ExecuteSPNonQuery("UpdateFactura", lstParams);
+                dt = DataHelper.GetInstance().ExecuteSPReader("UpdateFactura", lstParams);
             }
-
-            if (result == 1) { return true; } else { return false; }
+            if (dt != null && dt.Rows.Count == 1 && dt.Columns.Contains("id_factura"))
+            {
+                result = Convert.ToInt32(dt.Rows[0]["id_factura"]);
+            } else { result = -1; }
+            return result; 
         }
 
         public bool Delete(int id)
         {
             List<Parameters> lstParams = new List<Parameters>() { new Parameters("@IdFactura", id) };
             int result = DataHelper.GetInstance().ExecuteSPNonQuery("DeleteFacturaById", lstParams);
-            if (result == 1) { return true; } else { return false; }
+            if (result >= 1) { return true; } else { return false; }
         }
     }
 }

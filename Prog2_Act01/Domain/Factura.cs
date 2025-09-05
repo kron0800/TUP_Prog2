@@ -14,7 +14,7 @@ namespace Prog2_Act01.Domain
         public DateTime Fecha { get; set; }
         public FormaPago FormaPago { get; set; }
         public string Cliente { get; set; }
-        public List<DetalleFactura> Detalles { get; set; }
+        public List<DetalleFactura> Detalles { get; set; } = new List<DetalleFactura>();
 
         public Factura() { }
 

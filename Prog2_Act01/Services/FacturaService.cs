@@ -8,34 +8,43 @@ namespace Prog2_Act01.Services
 
         public FacturaService() { }
 
-        public List<Factura> GetAllFacturas()
+          public List<Factura> GetAllFacturas()
         {
             using var uow = new UnitOfWork();
-            return uow.FacturaRepository.GetAll();
+            List<Factura> facturas = uow.FacturaRepository.GetAll();
+            foreach(Factura factura in facturas)
+            {
+                factura.Detalles = uow.DetalleFacturaRepository.GetAllDetallesFacturaByIdFactura(factura.IdFactura);
+            }
+            return facturas;
         }
 
         public Factura GetFacturaById(int id)
         {
             using var uow = new UnitOfWork();
-            return uow.FacturaRepository.GetById(id);
+            Factura factura = uow.FacturaRepository.GetById(id);
+            factura.Detalles = uow.DetalleFacturaRepository.GetAllDetallesFacturaByIdFactura(factura.IdFactura);
+            return factura;
         }
 
-        public bool SaveFactura(Factura factura)
+        public int SaveFactura(Factura factura)
         {
             using var uow = new UnitOfWork();
             try
             {
-                bool ok = uow.FacturaRepository.Save(factura);
-                if (ok)
+                int idFactura = uow.FacturaRepository.Save(factura);
+                if (idFactura == -1) { throw new Exception("Unable to save factura"); }
+                foreach (DetalleFactura detalle in factura.Detalles)
                 {
-                    uow.Commit();
-                    return true;
-                }
-                else
-                {
-                    uow.Rollback();
-                    return false;
-                }
+                    detalle.IdFactura = idFactura;
+                    int idDetalle = uow.DetalleFacturaRepository.Save(detalle);
+                    if (idDetalle == -1)
+                    {
+                        throw new Exception("Failed to create detalleFactura");
+                    }
+                }   
+                uow.Commit();
+                return idFactura;
             }
             catch (Exception)
             {

@@ -31,27 +31,35 @@ namespace Prog2_Act01.Data
             return new Articulo(dt.Rows[0]);
         }
 
-        public bool Save(Articulo entity)
+        public int Save(Articulo entity)
         {
             List<Parameters> lstParams = new List<Parameters>()
             {
                 new Parameters("@Nombre", entity.Nombre),
                 new Parameters("@PrecioUnitario", entity.PrecioUnitario),
             };
+            DataTable dt = null;
             int result = 0;
             if (GetById(entity.IdArticulo) == null)
             {
                 // Create new one
-                result = DataHelper.GetInstance().ExecuteSPNonQuery("CreateNewArticulo", lstParams);
+                Console.WriteLine("creating new articulo");
+                dt = DataHelper.GetInstance().ExecuteSPReader("CreateNewArticulo", lstParams);
             }
             else
             {
                 // Update existing one
+                Console.WriteLine("updating articulo");
                 lstParams.Add(new Parameters("@IdArticulo", entity.IdArticulo));
-                result = DataHelper.GetInstance().ExecuteSPNonQuery("UpdateArticulo", lstParams);
+                dt = DataHelper.GetInstance().ExecuteSPReader("UpdateArticulo", lstParams);
             }
 
-            if (result == 1) { return true; } else { return false; }
+            if (dt != null && dt.Rows.Count == 1 && dt.Columns.Contains("id_articulo"))
+            {
+                result = Convert.ToInt32(dt.Rows[0]["id_articulo"]);
+            }
+            else { result = -1; }
+            return result;
         }
         public bool Delete(int id)
         {

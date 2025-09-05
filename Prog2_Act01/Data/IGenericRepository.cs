@@ -11,7 +11,7 @@ namespace Prog2_Act01.Data
     {
         List<T> GetAll();
         T GetById(int id);
-        bool Save(T entity);
+        int Save(T entity);
         bool Delete(int id);
     }
 }
