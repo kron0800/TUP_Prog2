@@ -1,4 +1,10 @@
 
+using Microsoft.Data.SqlClient;
+using Prog2_Act01.Data;
+using Prog2_Act01.Data.Utils;
+using Prog2_Act01.Domain;
+using Prog2_Act02.Services;
+
 namespace Prog2_Act02
 {
     public class Program
@@ -13,6 +19,11 @@ namespace Prog2_Act02
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IGenericApiService<Factura>, FacturaApiService>();
+
+            // Instance DataHelper Connection
+            DataHelper.GetInstance(Properties.Resources.connectionString);
 
             var app = builder.Build();
 
