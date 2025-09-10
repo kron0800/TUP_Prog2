@@ -26,9 +26,8 @@ namespace Prog2_Act01.Services
             {
                 int idArticulo = uow.ArticuloRepository.Save(articulo);
                 if (idArticulo == -1) { throw new Exception("Unable to save articulo"); }
-                articulo.IdArticulo = idArticulo;
                 uow.Commit();
-                return articulo;
+                return GetArticuloById(idArticulo);
             }
             catch (Exception)
             {

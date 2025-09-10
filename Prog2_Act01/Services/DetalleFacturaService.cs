@@ -30,8 +30,7 @@ namespace Prog2_Act01.Services
                 int idDetalleFactura = uow.DetalleFacturaRepository.Save(detalleFactura);
                 if (idDetalleFactura == -1) { throw new Exception("Unable to save detalleFactura"); }
                 uow.Commit();
-                detalleFactura.IdDetalleFactura = idDetalleFactura;
-                return detalleFactura;                
+                return GetDetalleFacturaById(idDetalleFactura);                
             }
             catch (Exception)
             {
