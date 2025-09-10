@@ -35,16 +35,14 @@ namespace Prog2_Act01.Services
             {
                 int idFactura = uow.FacturaRepository.Save(factura);
                 if (idFactura == -1) { throw new Exception("Unable to save factura"); }
-                factura.IdFactura = idFactura;
                 foreach (DetalleFactura detalle in factura.Detalles)
                 {
                     detalle.IdFactura = idFactura;
                     int idDetalle = uow.DetalleFacturaRepository.Save(detalle);
                     if (idDetalle == -1) { throw new Exception("Failed to create detalleFactura"); }
-                    detalle.IdDetalleFactura = idDetalle;
                 }   
                 uow.Commit();
-                return factura;
+                return GetFacturaById(idFactura);
             }
             catch (Exception)
             {
