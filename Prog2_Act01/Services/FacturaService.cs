@@ -3,12 +3,12 @@ using Prog2_Act01.Domain;
 
 namespace Prog2_Act01.Services
 {
-    public class FacturaService
+    public class FacturaService : IFacturaService
     {
 
         public FacturaService() { }
 
-          public List<Factura> GetAllFacturas()
+        public List<Factura> GetAllFacturas()
         {
             using var uow = new UnitOfWork();
             List<Factura> facturas = uow.FacturaRepository.GetAll();
@@ -23,28 +23,28 @@ namespace Prog2_Act01.Services
         {
             using var uow = new UnitOfWork();
             Factura factura = uow.FacturaRepository.GetById(id);
+            if (factura == null) { return null; }
             factura.Detalles = uow.DetalleFacturaRepository.GetAllDetallesFacturaByIdFactura(factura.IdFactura);
             return factura;
         }
 
-        public int SaveFactura(Factura factura)
+        public Factura SaveFactura(Factura factura)
         {
             using var uow = new UnitOfWork();
             try
             {
                 int idFactura = uow.FacturaRepository.Save(factura);
                 if (idFactura == -1) { throw new Exception("Unable to save factura"); }
+                factura.IdFactura = idFactura;
                 foreach (DetalleFactura detalle in factura.Detalles)
                 {
                     detalle.IdFactura = idFactura;
                     int idDetalle = uow.DetalleFacturaRepository.Save(detalle);
-                    if (idDetalle == -1)
-                    {
-                        throw new Exception("Failed to create detalleFactura");
-                    }
+                    if (idDetalle == -1) { throw new Exception("Failed to create detalleFactura"); }
+                    detalle.IdDetalleFactura = idDetalle;
                 }   
                 uow.Commit();
-                return idFactura;
+                return factura;
             }
             catch (Exception)
             {
