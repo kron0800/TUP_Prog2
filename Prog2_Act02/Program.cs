@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using Prog2_Act01.Data;
 using Prog2_Act01.Data.Utils;
 using Prog2_Act01.Domain;
-using Prog2_Act02.Services;
+using Prog2_Act01.Services;
 
 namespace Prog2_Act02
 {
@@ -20,7 +20,7 @@ namespace Prog2_Act02
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<IGenericApiService<Factura>, FacturaApiService>();
+            builder.Services.AddScoped<IFacturaService, FacturaService>();
 
             // Instance DataHelper Connection
             DataHelper.GetInstance(Properties.Resources.connectionString);

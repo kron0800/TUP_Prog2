@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Prog2_Act01.Domain;
 using Prog2_Act01.Services;
-using Prog2_Act02.Services;
 using Prog2_Act02.Utils;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -13,9 +12,9 @@ namespace Prog2_Act02.Controllers
     [ApiController]
     public class FacturaController : ControllerBase, IGenericApiController<Factura>
     {
-        private readonly IGenericApiService<Factura> service; 
+        private readonly IFacturaService service; 
 
-        public FacturaController(IGenericApiService<Factura> Service)
+        public FacturaController(IFacturaService Service)
         {
             this.service = Service;
         }
@@ -23,13 +22,13 @@ namespace Prog2_Act02.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(service.GetAll());
+            return Ok(service.GetAllFacturas());
         }
 
         [HttpGet("/api/[controller]/{id:int}")]
         public IActionResult GetById(int id)
         {
-            Factura? factura = service.GetById(id);
+            Factura? factura = service.GetFacturaById(id);
             if (factura == null) {
                 return NotFound($"Unable to find Factura with id '{id}'");
             }
@@ -42,14 +41,14 @@ namespace Prog2_Act02.Controllers
         [HttpPut]
         public IActionResult Save([FromBody] Factura entity)
         {
-            int idFactura = service.Save(entity);
-            return Created("", CustomResponse.Success(data: service.GetById(idFactura)));
+            Factura factura = service.SaveFactura(entity);
+            return Created("", CustomResponse.Success(data: factura));
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            bool ok = service.Delete(id);
+            bool ok = service.DeleteFacturaByID(id);
             if (ok) { return Ok(msg: "Factura deleted successfully"); }
             else { return NotFound($"Unable to find Factura with id '{id}'"); }
         }
