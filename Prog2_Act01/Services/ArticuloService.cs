@@ -3,7 +3,7 @@ using Prog2_Act01.Domain;
 
 namespace Prog2_Act01.Services
 {
-    public class ArticuloService
+    public class ArticuloService: IArticuloService
     {
         public ArticuloService() { }
 
@@ -19,15 +19,16 @@ namespace Prog2_Act01.Services
             return uow.ArticuloRepository.GetById(id);
         }
 
-        public int SaveArticulo(Articulo articulo)
+        public Articulo SaveArticulo(Articulo articulo)
         {
             using var uow = new UnitOfWork();
             try
             {
                 int idArticulo = uow.ArticuloRepository.Save(articulo);
                 if (idArticulo == -1) { throw new Exception("Unable to save articulo"); }
+                articulo.IdArticulo = idArticulo;
                 uow.Commit();
-                return idArticulo;
+                return articulo;
             }
             catch (Exception)
             {

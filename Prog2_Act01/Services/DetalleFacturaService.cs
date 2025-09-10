@@ -8,10 +8,8 @@ using Prog2_Act01.Domain;
 
 namespace Prog2_Act01.Services
 {
-    public class DetalleFacturaService
+    public class DetalleFacturaService : IDetalleFacturaService
     {
-        public DetalleFacturaService() { }
-
         public List<DetalleFactura> GetAllDetallesFacturas()
         {
             using var uow = new UnitOfWork();
@@ -24,7 +22,7 @@ namespace Prog2_Act01.Services
             return uow.DetalleFacturaRepository.GetById(id);
         }
 
-        public int SaveDetalleFactura(DetalleFactura detalleFactura)
+        public DetalleFactura SaveDetalleFactura(DetalleFactura detalleFactura)
         {
             using var uow = new UnitOfWork();
             try
@@ -32,7 +30,8 @@ namespace Prog2_Act01.Services
                 int idDetalleFactura = uow.DetalleFacturaRepository.Save(detalleFactura);
                 if (idDetalleFactura == -1) { throw new Exception("Unable to save detalleFactura"); }
                 uow.Commit();
-                return idDetalleFactura;                
+                detalleFactura.IdDetalleFactura = idDetalleFactura;
+                return detalleFactura;                
             }
             catch (Exception)
             {
