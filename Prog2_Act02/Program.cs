@@ -19,8 +19,11 @@ namespace Prog2_Act02
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            
+            // Dependency Injection
             builder.Services.AddScoped<IFacturaService, FacturaService>();
+            builder.Services.AddScoped<IDetalleFacturaService, DetalleFacturaService>();
+            builder.Services.AddScoped<IArticuloService, ArticuloService>();
 
             // Instance DataHelper Connection
             DataHelper.GetInstance(Properties.Resources.connectionString);

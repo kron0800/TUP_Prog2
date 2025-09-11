@@ -20,7 +20,7 @@ namespace Prog2_Act02.Utils
             Data = data;
         }
 
-        public static CustomResponse Success(string? message = null, object ? data = null)
+        public static CustomResponse Success(object ? data = null, string? message = null)
         {
             return new CustomResponse("success", null, data);
         }

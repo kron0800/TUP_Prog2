@@ -12,28 +12,42 @@ namespace Prog2_Act02.Controllers
     [ApiController]
     public class FacturaController : ControllerBase, IGenericApiController<Factura>
     {
-        private readonly IFacturaService service; 
+        private readonly IFacturaService _service; 
 
         public FacturaController(IFacturaService Service)
         {
-            this.service = Service;
+            this._service = Service;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(service.GetAllFacturas());
+            try
+            {
+                return Ok(CustomResponse.Success(_service.GetAllFacturas()));
+            }
+            catch (Exception)
+            {
+                return ServerError();
+            }
         }
 
         [HttpGet("/api/[controller]/{id:int}")]
         public IActionResult GetById(int id)
         {
-            Factura? factura = service.GetFacturaById(id);
-            if (factura == null) {
-                return NotFound($"Unable to find Factura with id '{id}'");
+            try
+            {
+                Factura? factura = _service.GetFacturaById(id);
+                if (factura == null) {
+                    return NotFound(CustomResponse.Error($"Factura with ID '{id}' was not found."));
+                }
+                else {
+                    return Ok(CustomResponse.Success(factura));
+                }
             }
-            else {
-                return Ok(factura);
+            catch (Exception)
+            {
+                return ServerError();
             }
         }
 
@@ -41,27 +55,36 @@ namespace Prog2_Act02.Controllers
         [HttpPut]
         public IActionResult Save([FromBody] Factura entity)
         {
-            Factura factura = service.SaveFactura(entity);
-            return Created("", CustomResponse.Success(data: factura));
+            try
+            {
+                Factura factura = _service.SaveFactura(entity);
+                return Created("", CustomResponse.Success(factura));
+            }
+            catch (Exception)
+            {
+                return ServerError();
+            }
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            bool ok = service.DeleteFacturaByID(id);
-            if (ok) { return Ok(msg: "Factura deleted successfully"); }
-            else { return NotFound($"Unable to find Factura with id '{id}'"); }
+            try
+            {
+                bool ok = _service.DeleteFacturaByID(id);
+                if (ok) { 
+                    return Ok(CustomResponse.Success(message: $"Factura with ID '{id}' has been deleted.")); 
+                }
+                else {
+                    return NotFound(CustomResponse.Error($"Unable to find Factura with id '{id}'")); 
+                }
+            }
+            catch (Exception)
+            {
+                return ServerError();
+            }
         }
-
-        // Override methods
-        private OkObjectResult Ok([ActionResultObjectValue] object? value = null, string? msg = null)
-        {
-            return base.Ok(CustomResponse.Success(msg, value));
-        }
-
-        private NotFoundObjectResult NotFound(string? msg = null, [ActionResultObjectValue] object? value = null)
-        {
-            return base.NotFound(CustomResponse.Error(msg, value)); 
-        }
+        
+        private ObjectResult ServerError() => StatusCode(StatusCodes.Status500InternalServerError, CustomResponse.Error("An error occurred while processing your request."));
     }
 }
