@@ -48,8 +48,7 @@ namespace Prog2_Act02.Controllers
         }
 
         [HttpPost]
-        [HttpPut]
-        public IActionResult Save([FromBody] Articulo entity)
+        public IActionResult Create([FromBody] Articulo entity)
         {
             try
             {
@@ -62,6 +61,33 @@ namespace Prog2_Act02.Controllers
                 {
                     return Ok(CustomResponse.Success(articulo));
                 }
+            }
+            catch (Exception)
+            {
+                return ServerError();
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Articulo entity)
+        {
+            
+            try
+            {
+                if (entity == null || entity.IdArticulo <= 0)
+                {
+                    return BadRequest(CustomResponse.Error("The request body cannot be null and must have a valid IdArticulo."));
+                }
+
+                Articulo? searchArticulo = _service.GetArticuloById(entity.IdArticulo);
+                if (searchArticulo == null)
+                {
+                    return NotFound(CustomResponse.Error($"Articulo with ID '{entity.IdArticulo}' was not found."));
+                }
+                
+                Articulo? updatedArticulo = _service.SaveArticulo(entity);
+                if (updatedArticulo == null) { return ServerError(); }
+                return Ok(CustomResponse.Success(updatedArticulo));
             }
             catch (Exception)
             {
@@ -88,5 +114,6 @@ namespace Prog2_Act02.Controllers
         }
 
         private ObjectResult ServerError() => StatusCode(StatusCodes.Status500InternalServerError, CustomResponse.Error("An error occurred while processing your request."));
+
     }
 }

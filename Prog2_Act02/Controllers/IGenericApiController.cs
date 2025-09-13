@@ -7,7 +7,7 @@ namespace Prog2_Act02.Controllers
         IActionResult GetAll();
         IActionResult GetById(int id);
         IActionResult Update([FromBody] T entity);
-        IActionResult Save([FromBody] T entity);
+        IActionResult Create([FromBody] T entity);
         IActionResult Delete(int id);
     }
 }

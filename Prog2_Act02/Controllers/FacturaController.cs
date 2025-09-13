@@ -52,13 +52,38 @@ namespace Prog2_Act02.Controllers
         }
 
         [HttpPost]
-        [HttpPut]
-        public IActionResult Save([FromBody] Factura entity)
+        public IActionResult Create([FromBody] Factura entity)
         {
             try
             {
                 Factura factura = _service.SaveFactura(entity);
                 return Created("", CustomResponse.Success(factura));
+            }
+            catch (Exception)
+            {
+                return ServerError();
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Factura entity)
+        {
+            try
+            {
+                if (entity == null || entity.IdFactura <= 0)
+                {
+                    return BadRequest(CustomResponse.Error("The request body cannot be null and must have a valid IdFactura."));
+                }
+
+                Factura? searchFactura = _service.GetFacturaById(entity.IdFactura);
+                if (searchFactura == null)
+                {
+                    return NotFound(CustomResponse.Error($"Factura with ID '{entity.IdFactura}' was not found."));
+                }
+                
+                Factura? updatedFactura = _service.SaveFactura(entity);
+                if (updatedFactura == null) { return ServerError(); }
+                return Ok(CustomResponse.Success(updatedFactura));
             }
             catch (Exception)
             {
@@ -86,5 +111,6 @@ namespace Prog2_Act02.Controllers
         }
         
         private ObjectResult ServerError() => StatusCode(StatusCodes.Status500InternalServerError, CustomResponse.Error("An error occurred while processing your request."));
+
     }
 }
