@@ -1,6 +1,6 @@
 .vs
 obj/
-Prog2_Act02/bin
+**/bin/
 
 # Ignore desktop.ini from GoogleDrive 
 desktop.ini
