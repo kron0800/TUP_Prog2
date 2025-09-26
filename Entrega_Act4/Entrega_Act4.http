@@ -1,0 +1,6 @@
+@Entrega_Act4_HostAddress = http://localhost:5102
+
+GET {{Entrega_Act4_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "26113dc6-29da-4589-b4d2-6fefd28db4f2",
+		"name": "Act_4_Prog_II",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19459084"
+	},
+	"item": [
+		{
+			"name": "Consultar envios",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idFactura\": 26,\r\n    \"nroFactura\": 1478,\r\n    \"fecha\": \"2021-12-29\",\r\n    \"idFormaPago\": 3,\r\n    \"cliente\": \"Pedro Sanchez\",\r\n    \"detalles\": [\r\n        {\r\n            \"articulo\": {\r\n                \"idArticulo\": 2\r\n            },\r\n            \"cantidad\": 1\r\n        }\r\n    ]\r\n}   "
+				},
+				"url": {
+					"raw": "{{baseURL}}/envios",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"envios"
+					],
+					"query": [
+						{
+							"key": "direccion",
+							"value": "Bv San Juan 235",
+							"disabled": true
+						},
+						{
+							"key": "estado",
+							"value": "Cancelado",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Consultar envios - Ejemplo",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idFactura\": 26,\r\n    \"nroFactura\": 1478,\r\n    \"fecha\": \"2021-12-29\",\r\n    \"idFormaPago\": 3,\r\n    \"cliente\": \"Pedro Sanchez\",\r\n    \"detalles\": [\r\n        {\r\n            \"articulo\": {\r\n                \"idArticulo\": 2\r\n            },\r\n            \"cantidad\": 1\r\n        }\r\n    ]\r\n}   "
+						},
+						"url": {
+							"raw": "{{baseURL}}/envios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"envios"
+							],
+							"query": [
+								{
+									"key": "direccion",
+									"value": "Bv San Juan 235",
+									"disabled": true
+								},
+								{
+									"key": "estado",
+									"value": "Cancelado",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Sep 2025 23:27:25 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"estado\": \"Entregado\",\n        \"direccion\": \"Bv San Juan 235\",\n        \"fecha\": \"2024-06-01T00:00:00\",\n        \"dniCliente\": 12345678,\n        \"detalles\": [\n            {\n                \"id\": 9,\n                \"producto\": {\n                    \"id\": 1,\n                    \"nombre\": \"Camiseta\",\n                    \"precio\": 1500\n                },\n                \"cantidad\": 2,\n                \"comentario\": \"Entrega rápida\"\n            },\n            {\n                \"id\": 10,\n                \"producto\": {\n                    \"id\": 2,\n                    \"nombre\": \"Pantalón\",\n                    \"precio\": 2500\n                },\n                \"cantidad\": 1,\n                \"comentario\": \"Frágil\"\n            }\n        ]\n    },\n    {\n        \"id\": 2,\n        \"estado\": \"Cancelado\",\n        \"direccion\": \"Av Colon 2456\",\n        \"fecha\": \"2024-06-02T00:00:00\",\n        \"dniCliente\": 87654321,\n        \"detalles\": [\n            {\n                \"id\": 11,\n                \"producto\": {\n                    \"id\": 3,\n                    \"nombre\": \"Zapatos\",\n                    \"precio\": 3500\n                },\n                \"cantidad\": 3,\n                \"comentario\": \"Regalo\"\n            }\n        ]\n    },\n    {\n        \"id\": 3,\n        \"estado\": \"Pendiente\",\n        \"direccion\": \"Padre Luchessi 45\",\n        \"fecha\": \"2024-06-03T00:00:00\",\n        \"dniCliente\": 11223344,\n        \"detalles\": [\n            {\n                \"id\": 12,\n                \"producto\": {\n                    \"id\": 1,\n                    \"nombre\": \"Camiseta\",\n                    \"precio\": 1500\n                },\n                \"cantidad\": 1,\n                \"comentario\": \"Sin comentarios\"\n            }\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Cancelar envio por ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/envios/2",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"envios",
+						"2"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Cancelar envio por ID - Success",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/envios/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"envios",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Sep 2025 23:28:45 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"success\"\n}"
+				},
+				{
+					"name": "Cancelar envio por ID - Failure",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/envios/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"envios",
+								"2"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Sep 2025 23:25:31 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"error\",\n    \"message\": \"Envio with ID '2' is already cancelled.\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
